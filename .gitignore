@@ -26,3 +26,10 @@ pnpm-debug.log*
 sample-markup
 *.lock
 social.txt
+
+
+
+# Ignore Claude files
+CLAUDE.md
+*[cC]laude*
+

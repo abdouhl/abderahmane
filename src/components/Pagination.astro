@@ -3,11 +3,7 @@ import SiteOptions from "../site.config.mjs"
 export interface Props {
   page: {
     data: any[]
-    url: {
-      current: string
-      next?: string
-      prev?: string
-    }
+    url: { current: string; next?: string; prev?: string }
     currentPage: number
     lastPage: number
     size: number
@@ -16,56 +12,75 @@ export interface Props {
 }
 
 const { page } = Astro.props
+const from = (page.currentPage - 1) * page.size + 1
+const to = Math.min(page.currentPage * page.size, page.total)
+
+const infoAr = `عرض ${from}–${to} من أصل ${page.total} مقال`
+const infoEn = `Showing ${from}–${to} of ${page.total} posts`
 ---
 
-<nav class="flex justify-center items-center space-x-4 mt-12" aria-label="Pagination Navigation">
-  <!-- Previous Button -->
+<nav class="flex justify-center items-center gap-2 mt-14" aria-label="Pagination">
   {
-    SiteOptions.pagination.showPrevNext &&
-      (page.url.prev ? (
-        <a href={page.url.prev} class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md hover:border-gray-400 dark:hover:border-gray-500 transition-colors" aria-label="Go to previous page">
-          ← {SiteOptions.pagination.prevText}
-        </a>
-      ) : (
-        <span class="px-4 py-2 text-sm font-medium text-gray-400 dark:text-gray-600 border border-gray-200 dark:border-gray-700 rounded-md cursor-not-allowed">← {SiteOptions.pagination.prevText}</span>
-      ))
+    page.url.prev ? (
+      <a
+        href={page.url.prev}
+        data-i18n="prev_page"
+        class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 border border-[#d0cdc6] dark:border-gray-700 hover:border-gray-400 transition-colors"
+      >
+        ← السابق
+      </a>
+    ) : (
+      <span
+        data-i18n="prev_page"
+        class="px-4 py-2 text-sm font-medium text-gray-300 dark:text-gray-700 border border-[#d0cdc6] dark:border-gray-800 cursor-not-allowed"
+      >
+        ← السابق
+      </span>
+    )
   }
 
-  <!-- Page Numbers -->
-  <div class="flex items-center space-x-2">
+  <div class="flex items-center gap-1">
     {
-      Array.from({ length: page.lastPage }, (_, i) => i + 1).map((pageNum) => {
-        const isCurrentPage = pageNum === page.currentPage
-        const pageUrl = pageNum === 1 ? "/blog/" : `/blog/${pageNum}/`
-
-        return isCurrentPage ? (
-          <span class="px-3 py-2 text-sm font-medium bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-md" aria-current="page">
-            {pageNum}
+      Array.from({ length: page.lastPage }, (_, i) => i + 1).map((n) => {
+        const isCurrent = n === page.currentPage
+        const url = n === 1 ? "/blog/" : `/blog/${n}/`
+        return isCurrent ? (
+          <span class="px-3 py-2 text-sm font-medium bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900" aria-current="page">
+            {n}
           </span>
         ) : (
-          <a href={pageUrl} class="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors" aria-label={`Go to page ${pageNum}`}>
-            {pageNum}
+          <a href={url} class="px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+            {n}
           </a>
         )
       })
     }
   </div>
 
-  <!-- Next Button -->
   {
-    SiteOptions.pagination.showPrevNext &&
-      (page.url.next ? (
-        <a href={page.url.next} class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 border border-gray-300 dark:border-gray-600 rounded-md hover:border-gray-400 dark:hover:border-gray-500 transition-colors" aria-label="Go to next page">
-          {SiteOptions.pagination.nextText} →
-        </a>
-      ) : (
-        <span class="px-4 py-2 text-sm font-medium text-gray-400 dark:text-gray-600 border border-gray-200 dark:border-gray-700 rounded-md cursor-not-allowed">{SiteOptions.pagination.nextText} →</span>
-      ))
+    page.url.next ? (
+      <a
+        href={page.url.next}
+        data-i18n="next_page"
+        class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 border border-[#d0cdc6] dark:border-gray-700 hover:border-gray-400 transition-colors"
+      >
+        التالي →
+      </a>
+    ) : (
+      <span
+        data-i18n="next_page"
+        class="px-4 py-2 text-sm font-medium text-gray-300 dark:text-gray-700 border border-[#d0cdc6] dark:border-gray-800 cursor-not-allowed"
+      >
+        التالي →
+      </span>
+    )
   }
 </nav>
 
-<!-- Pagination Info -->
-<div class="text-center mt-4 text-sm text-gray-500 dark:text-gray-400">
-  Showing {(page.currentPage - 1) * page.size + 1} to {Math.min(page.currentPage * page.size, page.total)} of {page.total}
-  {SiteOptions.pagination.postLabel}
+<div
+  data-text-ar={infoAr}
+  data-text-en={infoEn}
+  class="text-center mt-4 text-sm text-gray-400 dark:text-gray-500"
+>
+  {infoAr}
 </div>

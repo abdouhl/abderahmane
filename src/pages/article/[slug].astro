@@ -20,9 +20,10 @@ const post = Astro.props
 const { title, pubDate, category, description, thumb, author, tags, large } = post.data
 const { Content } = await post.render()
 
-// Get similar posts (same category, excluding current post)
 const allPosts = await getCollection("article")
-const similarPosts = allPosts.filter((p) => p.slug !== post.slug && p.data.category === post.data.category).slice(0, 3)
+const similarPosts = allPosts
+  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
+  .slice(0, 3)
 
 const formattedDate = new Intl.DateTimeFormat("en-US", {
   year: "numeric",
@@ -32,71 +33,90 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
 ---
 
 <BlogLayout title={title} description={description}>
-  <Header showTitle={true} />
+  <Header slot="hero" />
 
-  <!-- Light Horizontal Bar -->
-  <hr class="border-t border-gray-200 dark:border-gray-700 my-8" />
+  <div class="pt-10 pb-6 border-b border-[#d0cdc6] dark:border-gray-800">
+    {
+      category && (
+        <a
+          href={`/category/${category.toLowerCase().replace(/\s+/g, "-")}`}
+          class="text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mb-4 block"
+        >
+          {category}
+        </a>
+      )
+    }
 
-  <!-- Blog Post Header -->
-  <header class="mb-8 relative">
-    <h1 class="text-3xl md:text-4xl lg:text-3xl font-bold tracking-tight mb-4 text-gray-900 dark:text-slate-100">
+    <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-5 text-gray-900 dark:text-slate-50 leading-tight">
       {title}
     </h1>
-    <div class="flex flex-wrap items-center text-sm text-gray-500 dark:text-gray-400 space-x-4 mb-4">
-      <span>By <a href={`/author/${author.toLowerCase().replace(/\s+/g, "-")}`} class="text-gray-500 dark:text-gray-400 hover:underline no-underline"><strong>{author}</strong></a></span>
-      <span>{formattedDate}</span>
-      {
-        category && (
-          <span>
-            {SiteOptions.labels.postedIn}
-            <a href={`/category/${category.toLowerCase().replace(/\s+/g, "-")}`} class="text-gray-500 dark:text-gray-400 hover:underline no-underline">
-              <strong>{category}</strong>
-            </a>
-          </span>
-        )
-      }
-    </div>
-    <div class="text-sm text-gray-500 dark:text-gray-400">
-      Tags:
-      {
-        tags.map((tag) => (
-          <a href={`/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`} class="bg-gray-100 text-gray-600 dark:bg-slate-700 dark:text-slate-300 px-2 py-1 rounded hover:bg-gray-200 dark:hover:bg-slate-600 ml-1 no-underline hover:underline">
-            {tag}
-          </a>
-        ))
-      }
-    </div>
-  </header>
 
-  <!-- Blog Post Content -->
-  <article class="mt-10 prose prose-h2:text-2xl prose-lg max-w-none text-gray-700 dark:prose-strong:text-slate-100 dark:text-slate-300 prose-headings:text-gray-900 dark:prose-headings:text-slate-100 prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-code:text-slate-700 dark:prose-code:text-slate-100 prose-pre:bg-gray-100 dark:prose-pre:bg-slate-800 prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-600 prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400 prose-h3:text-[1.2em] ">
-    <!-- Show featured image -->
+    <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+      <a
+        href={`/author/${author.toLowerCase().replace(/\s+/g, "-")}`}
+        class="font-semibold text-gray-700 dark:text-gray-300 hover:underline"
+      >
+        {author}
+      </a>
+      <span class="text-gray-300 dark:text-gray-600">·</span>
+      <span>{formattedDate}</span>
+    </div>
+
+    {
+      tags && tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-4">
+          {tags.map((tag) => (
+            <a
+              href={`/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
+              class="text-xs text-gray-500 dark:text-gray-400 border border-[#d0cdc6] dark:border-gray-700 px-2 py-1 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            >
+              {tag}
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <article
+    class="mt-10 prose prose-lg max-w-none
+      prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-slate-100
+      prose-p:text-gray-700 dark:prose-p:text-slate-300
+      prose-a:text-gray-900 dark:prose-a:text-slate-100 prose-a:underline prose-a:decoration-gray-300 dark:prose-a:decoration-gray-600
+      prose-strong:text-gray-900 dark:prose-strong:text-slate-100
+      prose-code:text-slate-700 dark:prose-code:text-slate-200
+      prose-pre:bg-gray-50 dark:prose-pre:bg-slate-800
+      prose-blockquote:border-gray-300 dark:prose-blockquote:border-gray-600
+      prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400
+      prose-img:rounded-none"
+  >
     {
       large && (
-        <div class="mb-8">
-          <img src={large} alt={title} class="w-full h-auto rounded-lg shadow-md" />
+        <div class="mb-8 -mx-4 sm:mx-0">
+          <img src={large} alt={title} class="w-full h-auto" />
         </div>
       )
     }
     <Content />
   </article>
 
-
-  <!-- Similar Posts Section -->
   {
     SiteOptions.showSimilarPosts && similarPosts.length > 0 && (
-    <hr class="border-t border-gray-200 dark:border-gray-700 my-12" />
-      <section>
-        <h2 class="text-2xl font-semibold mb-8 text-center text-gray-800 dark:text-slate-200">{SiteOptions.labels.youMightAlsoLike}</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {similarPosts.map((similarPost) => (
-            <FeaturedCard post={similarPost} />
-          ))}
-        </div>
-      </section>
+      <>
+        <hr class="border-t border-[#d0cdc6] dark:border-gray-800 my-14" />
+        <section>
+          <h2 class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500 mb-8">
+            {SiteOptions.labels.youMightAlsoLike}
+          </h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {similarPosts.map((similarPost) => (
+              <FeaturedCard post={similarPost} />
+            ))}
+          </div>
+        </section>
+      </>
     )
   }
 
-  <!-- Minimal Footer -->
-  <Footer/>
+  <Footer />
 </BlogLayout>

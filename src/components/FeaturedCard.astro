@@ -7,23 +7,45 @@ export interface Props {
 }
 
 const { post } = Astro.props
-const { title, description, thumb } = post.data
+const { title, description, thumb, category } = post.data
 ---
 
-<article class="bg-gray-50 dark:bg-slate-800 rounded-lg shadow-sm p-6 flex flex-col items-start">
+<article class="flex flex-col group">
   {
     SiteOptions.showThumbnailOnFeaturedPosts && thumb && (
-      <a href={`/article/${post.slug}`} class="w-full">
-        <img src={thumb} alt={title} class="w-full h-auto object-cover rounded mb-4" />
+      <a href={`/article/${post.slug}`} class="block mb-4 overflow-hidden">
+        <img
+          src={thumb}
+          alt={title}
+          class="w-full h-48 object-cover transition-opacity group-hover:opacity-90"
+          loading="lazy"
+        />
       </a>
     )
   }
-  <h3 class="text-xl font-bold mb-2"><a href={`/article/${post.slug}`}>{title}</a></h3>
-  <p class="text-gray-500 dark:text-gray-400 text-sm mb-4 flex-grow">{description}</p>
+  {
+    category && (
+      <span class="text-[11px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 block">
+        {category}
+      </span>
+    )
+  }
+  <h3 class="text-lg font-bold leading-snug mb-2 text-gray-900 dark:text-slate-100">
+    <a href={`/article/${post.slug}`} class="group-hover:underline decoration-1 underline-offset-2">
+      {title}
+    </a>
+  </h3>
+  <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4 flex-grow line-clamp-3">
+    {description}
+  </p>
   {
     SiteOptions.showReadMoreLinkOnFeaturedPosts && (
-      <a href={`/article/${post.slug}`} class="text-black dark:text-white underline text-sm mt-auto self-start">
-        {SiteOptions.labels.readMore}
+      <a
+        href={`/article/${post.slug}`}
+        data-i18n="read_more"
+        class="text-[11px] font-bold uppercase tracking-[0.1em] text-gray-900 dark:text-white hover:opacity-60 transition-opacity mt-auto self-start"
+      >
+        اقرأ المزيد
       </a>
     )
   }

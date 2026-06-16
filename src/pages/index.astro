@@ -4,66 +4,112 @@ import BlogLayout from "../layouts/BlogLayout.astro"
 import Header from "../components/Header.astro"
 import Footer from "../components/Footer.astro"
 import PostCard from "../components/PostCard.astro"
-import FeaturedCard from "../components/FeaturedCard.astro"
 import SiteOptions from "../site.config.mjs"
 
-// Get all articles and sort by publication date
 const allPosts = await getCollection("article")
-const sortedPosts = allPosts.sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf())
-
-// Get featured posts
-const featuredPosts = allPosts.filter((post) => post.data.featured).slice(0, 3)
-
-// Get latest posts for homepage (limit to 6)
+const sortedPosts = allPosts.sort(
+  (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+)
 const latestPosts = sortedPosts.slice(0, SiteOptions.numberOfLatestPostsOnHomePage || 6)
-const showCategory = SiteOptions.showCategoryOnPosts || false
+
+const categoryCounts = allPosts.reduce((acc, post) => {
+  const cat = post.data.category
+  if (cat) acc[cat] = (acc[cat] || 0) + 1
+  return acc
+}, {} as Record<string, number>)
+const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])
 ---
 
-<BlogLayout title=`${SiteOptions.siteTitle}`>
-  <Header />
+<BlogLayout title={SiteOptions.siteTitle}>
+  <Header slot="hero" />
 
-  <!-- Light Horizontal Bar -->
-  <hr class="border-t border-gray-200 dark:border-gray-700 my-8" />
+  <div class="flex gap-14 mt-12 mb-20">
 
-  <!-- Featured Blog Posts -->
+    <!-- Main: latest articles -->
+    <div class="flex-[2] min-w-0">
+      <h2 data-i18n="latest_articles" class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500 mb-6">
+        أحدث المقالات
+      </h2>
+      <ul>
+        {latestPosts.map((post) => <PostCard post={post} showCategory={true} />)}
+      </ul>
+      {
+        sortedPosts.length > (SiteOptions.numberOfLatestPostsOnHomePage || 6) && (
+          <div class="mt-10">
+            <a
+              href="/blog/"
+              data-i18n="view_all"
+              class="text-[11px] font-bold uppercase tracking-[0.1em] text-gray-900 dark:text-white hover:opacity-60 transition-opacity"
+            >
+              عرض جميع المقالات ←
+            </a>
+          </div>
+        )
+      }
+    </div>
 
-  {
-    SiteOptions.showFeaturrdPostsOnHomePage && featuredPosts.length > 0 && (
-      <section class="mb-16">
-        {SiteOptions.labels.featuredPosts && <h2 class="text-2xl font-semibold mb-8 text-center">{SiteOptions.labels.featuredPosts}</h2>}
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {featuredPosts.map((post) => (
-            <FeaturedCard post={post} />
-          ))}
+    <!-- Sidebar -->
+    <aside class="w-[280px] shrink-0 pt-8">
+
+      <!-- About -->
+      <div class="mb-10">
+        <h3 data-i18n="about_title" class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-900 dark:text-white mb-4">
+          عن الكاتب
+        </h3>
+        <p data-i18n="about_text" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+          أنا عبد الرحمان هلال. أكتب عن تطوير البرمجيات والتصميم والإنتاجية وتأملات الحياة.
+        </p>
+      </div>
+
+      <!-- Categories -->
+      {sortedCategories.length > 0 && (
+        <div class="mb-10">
+          <h3 data-i18n="categories_title" class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-900 dark:text-white mb-4">
+            التصنيفات
+          </h3>
+          <ul class="space-y-1">
+            {sortedCategories.map(([cat, count]) => (
+              <li class="border-b border-[#d0cdc6] dark:border-gray-800 pb-1">
+                <a
+                  href={`/category/${cat.toLowerCase().replace(/\s+/g, "-")}`}
+                  class="flex justify-between items-center py-1 text-sm text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
+                >
+                  <span>{cat}</span>
+                  <span class="text-gray-400 dark:text-gray-500 text-xs">({count})</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-        <hr class="border-t border-gray-200 dark:border-gray-700 my-12" />
-      </section>
-    )
-  }
+      )}
 
-  <!-- Latest Blog Posts -->
-  <section>
-    {SiteOptions.labels.latestPosts && <h2 class="text-2xl font-semibold mb-8 text-center">{SiteOptions.labels.latestPosts}</h2>}
-    <ul class="space-y-4">
-      {latestPosts.map((post) => <PostCard post={post} showCategory={showCategory} />)}
-    </ul>
+      <!-- Newsletter -->
+      <div>
+        <h3 data-i18n="newsletter_title" class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-900 dark:text-white mb-4">
+          النشرة البريدية
+        </h3>
+        <p data-i18n="newsletter_desc" class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          احصل على أحدث المقالات في بريدك الإلكتروني.
+        </p>
+        <form class="flex gap-0" onsubmit="return false;">
+          <input
+            type="email"
+            data-i18n-ph="newsletter_ph"
+            placeholder="أدخل بريدك الإلكتروني"
+            class="flex-1 px-3 py-2 text-sm border border-[#d0cdc6] dark:border-gray-700 bg-white dark:bg-zinc-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-gray-500 transition-colors min-w-0"
+          />
+          <button
+            type="submit"
+            data-i18n="newsletter_btn"
+            class="px-4 py-2 text-[11px] font-bold uppercase tracking-[0.08em] bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:opacity-80 transition-opacity shrink-0"
+          >
+            اشترك
+          </button>
+        </form>
+      </div>
 
-    <!-- View All Posts Link -->
-    {
-      sortedPosts.length > 6 && (
-        <div class="text-center mt-8">
-          <a href="/blog/" class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md transition-colors">
-            {/* View All Posts ({sortedPosts.length}) */}
-            {SiteOptions.labels.viewAllPosts}
-            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-            </svg>
-          </a>
-        </div>
-      )
-    }
+    </aside>
+  </div>
 
-    <!-- Minimal Footer -->
-    <Footer />
-  </section>
+  <Footer />
 </BlogLayout>

@@ -2,33 +2,26 @@
 import SiteOptions from "../site.config.mjs"
 ---
 
-<footer class="mt-16 py-8 text-center text-gray-400 dark:text-gray-500 text-sm border-t border-gray-100 dark:border-gray-700">
-  <div class="flex flex-col-reverse md:flex-row md:justify-between items-center space-y-reverse space-y-4 md:space-y-0">
-    <p>{SiteOptions.copyright}</p>
-    <nav class="">
-      <div class="flex items-center justify-center space-x-8 text-sm">
-        {
-          SiteOptions.showCategoriesLinkOnFooter && (
-            <a href="/categories" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-slate-100 transition-colors font-medium">
-              Categories
-            </a>
-          )
-        }
-        {
-          SiteOptions.showTagsLinkOnFooter && (
-            <a href="/tags" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-slate-100 transition-colors font-medium">
-              Tags
-            </a>
-          )
-        }
-        {
-          SiteOptions.showAuthorsLinkOnFooter && (
-            <a href="/authors" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-slate-100 transition-colors font-medium">
-              Authors
-            </a>
-          )
-        }
-      </div>
+<footer class="mt-20 py-8 border-t border-[#d0cdc6] dark:border-gray-800">
+  <div class="flex flex-wrap items-center justify-between gap-4">
+    <nav class="flex items-center gap-6 text-sm">
+      {
+        SiteOptions.showCategoriesLinkOnFooter && (
+          <a href="/categories" data-i18n="footer_categories" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+            التصنيفات
+          </a>
+        )
+      }
+      {
+        SiteOptions.showTagsLinkOnFooter && (
+          <a href="/tags" data-i18n="footer_tags" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+            الوسوم
+          </a>
+        )
+      }
     </nav>
+    <p data-i18n="copyright" class="text-sm text-gray-400 dark:text-gray-500">
+      © 2026 عبد الرحمان هلال. جميع الحقوق محفوظة.
+    </p>
   </div>
 </footer>
