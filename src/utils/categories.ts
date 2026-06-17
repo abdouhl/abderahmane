@@ -14,6 +14,7 @@ export const CATEGORY_MAP: Record<string, string> = {
   "Web Dev":      "تطوير الويب",
   "جيوسياسة":    "جيوسياسة",
   "حضارة":       "حضارة",
+  "تعليم":       "تعليم",
 }
 
 export function getCategoryAr(cat: string): string {

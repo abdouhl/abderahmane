@@ -21,9 +21,19 @@ const { title, pubDate, category, description, author, tags, large } = post.data
 const { Content } = await post.render()
 
 const allPosts = await getCollection("article")
+const postLang = post.data.lang ?? "en"
+const postTags = new Set(post.data.tags ?? [])
+
 const similarPosts = allPosts
-  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category && (p.data.lang ?? "en") === (post.data.lang ?? "en"))
+  .filter((p) => p.slug !== post.slug && (p.data.lang ?? "en") === postLang)
+  .map((p) => {
+    const sharedTags = (p.data.tags ?? []).filter((t) => postTags.has(t)).length
+    const sameCategory = p.data.category === post.data.category ? 1 : 0
+    return { post: p, score: sharedTags * 2 + sameCategory }
+  })
+  .sort((a, b) => b.score - a.score || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf())
   .slice(0, 3)
+  .map((entry) => entry.post)
 
 const dateAr = new Intl.DateTimeFormat("ar", {
   year: "numeric", month: "long", day: "numeric",
