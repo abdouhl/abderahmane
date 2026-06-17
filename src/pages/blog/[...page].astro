@@ -5,46 +5,37 @@ import BlogLayout from "../../layouts/BlogLayout.astro"
 import Header from "../../components/Header.astro"
 import Footer from "../../components/Footer.astro"
 import PostCard from "../../components/PostCard.astro"
-import FeaturedCard from "../../components/FeaturedCard.astro"
 import Pagination from "../../components/Pagination.astro"
 import SiteOptions from "../../site.config.mjs"
 
 export const getStaticPaths = (async ({ paginate }) => {
   const allPosts = await getCollection("article")
-  const sortedPosts = allPosts.sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf())
-
-  return paginate(sortedPosts, {
-    pageSize: SiteOptions.numberOfBlogPostsPerPage || 8, // Number of posts per page
-  })
+  const sortedPosts = allPosts.sort(
+    (a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+  )
+  return paginate(sortedPosts, { pageSize: SiteOptions.numberOfBlogPostsPerPage || 8 })
 }) satisfies GetStaticPaths
 
 const { page } = Astro.props
-
-// Get featured posts for the first page only
-const allPosts = await getCollection("article")
-const featuredPosts = page.currentPage === 1 ? allPosts.filter((post) => post.data.featured).slice(0, 3) : []
-
-const pageTitle = page.currentPage === 1 ? SiteOptions.siteTitle : `Blog - Page ${page.currentPage} | ${SiteOptions.siteTitle}`
-const showCategory = SiteOptions.showCategoryOnPosts || false
+const pageTitle = page.currentPage === 1
+  ? SiteOptions.siteTitle
+  : `الأرشيف - صفحة ${page.currentPage} | ${SiteOptions.siteTitle}`
 ---
 
 <BlogLayout title={pageTitle}>
-  <Header />
+  <Header slot="hero" />
 
-  <!-- Light Horizontal Bar -->
-  <hr class="border-t border-gray-200 dark:border-gray-700 my-8" />
+  <div class="mt-10 mb-6 border-b border-[#d0cdc6] dark:border-gray-800 pb-4">
+    <h1 data-i18n="nav_archive" class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500">
+      الأرشيف
+    </h1>
+  </div>
 
-  <!-- Latest Blog Posts -->
-  <section>
-    <!-- <h2 class={`text-2xl font-semibold mb-8  text-center`}>All Posts</h2> -->
-    <ul class="space-y-4">
-      {page.data.map((post) => <PostCard post={post} showCategory={showCategory} />)}
-    </ul>
-  </section>
+  <ul>
+    {page.data.map((post) => <PostCard post={post} showCategory={true} />)}
+  </ul>
 
-  <!-- Pagination -->
   <Pagination page={page} />
 
-  <!-- Minimal Footer -->
   <Footer />
 </BlogLayout>

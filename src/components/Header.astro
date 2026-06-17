@@ -6,13 +6,32 @@ import SiteOptions from "../site.config.mjs"
 
   <!-- Thin top nav -->
   <div class="border-b border-[#d0cdc6] dark:border-gray-800">
-    <div class="max-w-[1100px] mx-auto px-6 flex items-center justify-between h-10">
-      <nav class="flex items-center gap-7 text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
+    <div class="max-w-[1100px] mx-auto px-4 sm:px-6 flex items-center justify-between h-12 sm:h-10">
+
+      <!-- Desktop nav -->
+      <nav class="hidden sm:flex items-center gap-7 text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
         <a href="/" data-i18n="nav_home" class="hover:text-gray-900 dark:hover:text-white transition-colors">الرئيسية</a>
         <a href="/categories" data-i18n="nav_categories" class="hover:text-gray-900 dark:hover:text-white transition-colors">التصنيفات</a>
         <a href="/blog/" data-i18n="nav_archive" class="hover:text-gray-900 dark:hover:text-white transition-colors">الأرشيف</a>
         <a href="/tags" data-i18n="nav_tags" class="hover:text-gray-900 dark:hover:text-white transition-colors">الوسوم</a>
       </nav>
+
+      <!-- Mobile: hamburger -->
+      <button
+        id="mobile-menu-btn"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+        class="sm:hidden p-1 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+        onclick="
+          const menu = document.getElementById('mobile-menu');
+          const open = menu.classList.toggle('hidden');
+          this.setAttribute('aria-expanded', String(!open));
+        "
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
 
       <div class="flex items-center gap-3">
         <!-- Language toggle -->
@@ -43,13 +62,23 @@ import SiteOptions from "../site.config.mjs"
     </div>
   </div>
 
+  <!-- Mobile nav dropdown -->
+  <div id="mobile-menu" class="hidden sm:hidden border-b border-[#d0cdc6] dark:border-gray-800 bg-[#eeebe4] dark:bg-[#111110]">
+    <nav class="max-w-[1100px] mx-auto px-4 py-3 flex flex-col gap-0 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
+      <a href="/" data-i18n="nav_home" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">الرئيسية</a>
+      <a href="/categories" data-i18n="nav_categories" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">التصنيفات</a>
+      <a href="/blog/" data-i18n="nav_archive" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">الأرشيف</a>
+      <a href="/tags" data-i18n="nav_tags" class="py-2.5 hover:text-gray-900 dark:hover:text-white transition-colors">الوسوم</a>
+    </nav>
+  </div>
+
   <!-- Masthead -->
-  <div class="py-9 text-center border-b border-[#d0cdc6] dark:border-gray-800">
+  <div class="py-7 sm:py-9 text-center border-b border-[#d0cdc6] dark:border-gray-800">
     <a href="/" class="inline-block">
       <p
         class="masthead-name font-black text-gray-900 dark:text-white leading-none tracking-tight"
         data-i18n="site_name"
-        style="font-family: 'Cairo', sans-serif; font-size: clamp(2.2rem, 6vw, 4.5rem); letter-spacing: -0.01em;"
+        style="font-family: 'Cairo', sans-serif; font-size: clamp(2rem, 8vw, 4.5rem); letter-spacing: -0.01em;"
       >
         عبد الرحمان هلال
       </p>
@@ -57,7 +86,7 @@ import SiteOptions from "../site.config.mjs"
 
     <!-- Decorative subtitle -->
     <div class="flex items-center justify-center gap-5 mt-4 px-6">
-      <div class="h-px flex-1 max-w-[90px] bg-gray-400 dark:bg-gray-600"></div>
+      <div class="h-px flex-1 max-w-[60px] sm:max-w-[90px] bg-gray-400 dark:bg-gray-600"></div>
       <span
         data-i18n="site_subtitle"
         class="text-gray-500 dark:text-gray-400 uppercase"
@@ -65,7 +94,7 @@ import SiteOptions from "../site.config.mjs"
       >
         التقنية · التصميم · الحياة
       </span>
-      <div class="h-px flex-1 max-w-[90px] bg-gray-400 dark:bg-gray-600"></div>
+      <div class="h-px flex-1 max-w-[60px] sm:max-w-[90px] bg-gray-400 dark:bg-gray-600"></div>
     </div>
   </div>
 

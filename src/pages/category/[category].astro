@@ -5,11 +5,11 @@ import Header from "../../components/Header.astro"
 import Footer from "../../components/Footer.astro"
 import PostCard from "../../components/PostCard.astro"
 import SiteOptions from "../../site.config.mjs"
+import { getCategoryAr } from "../../utils/categories"
 
 export async function getStaticPaths() {
   const allPosts = await getCollection("article")
   const allCategories = [...new Set(allPosts.map((post) => post.data.category))]
-
   return allCategories.map((category) => ({
     params: { category: category.toLowerCase().replace(/\s+/g, "-") },
     props: {
@@ -21,50 +21,45 @@ export async function getStaticPaths() {
   }))
 }
 
-type Props = {
-  category: string
-  posts: CollectionEntry<"article">[]
-}
+type Props = { category: string; posts: CollectionEntry<"article">[] }
 
 const { category, posts } = Astro.props
-const countLabel = `${posts.length} ${posts.length === 1 ? "article" : "articles"}`
+const categoryAr = getCategoryAr(category)
+const arPosts = posts.filter((post) => (post.data.lang ?? "en") === "ar")
+const enPosts = posts.filter((post) => (post.data.lang ?? "en") === "en")
+const countAr = `${arPosts.length} ${arPosts.length === 1 ? "مقالة" : "مقالات"}`
+const countEn = `${enPosts.length} ${enPosts.length === 1 ? "article" : "articles"}`
 ---
 
-<BlogLayout title={`${category} — ${SiteOptions.siteTitle}`} description={`Articles in ${category}`}>
+<BlogLayout title={`${category} — ${SiteOptions.siteTitle}`} description={`مقالات في ${category}`}>
   <Header slot="hero" />
 
   <div class="pt-10 pb-6 border-b border-[#d0cdc6] dark:border-gray-800 mb-12">
-    <p class="text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400 dark:text-gray-500 mb-2">
-      Category
+    <p data-i18n="category_label" class="text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400 dark:text-gray-500 mb-2">
+      التصنيف
     </p>
-    <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-slate-100">
-      {category}
-    </h1>
-    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">{countLabel}</p>
+    <h1 data-text-ar={categoryAr} data-text-en={category} class="text-3xl font-bold tracking-tight text-gray-900 dark:text-slate-100">{categoryAr}</h1>
+    <p data-text-ar={countAr} data-text-en={countEn} class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+      {countAr}
+    </p>
   </div>
 
   <section>
-    {
-      posts.length > 0 ? (
-        <ul>
-          {posts.map((post) => (
-            <PostCard post={post} showCategory={false} />
-          ))}
-        </ul>
-      ) : (
-        <div class="py-12 text-center">
-          <p class="text-gray-500 dark:text-gray-400">{SiteOptions.labels.noArticlesFound}</p>
-        </div>
-      )
-    }
+    {posts.length > 0 ? (
+      <ul>{posts.map((post) => <PostCard post={post} showCategory={false} />)}</ul>
+    ) : (
+      <div class="py-12 text-center">
+        <p data-i18n="no_articles" class="text-gray-500 dark:text-gray-400">لا توجد مقالات.</p>
+      </div>
+    )}
   </section>
 
   <div class="mt-14 flex justify-center gap-8">
-    <a href="/categories" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-      {SiteOptions.labels.allCategories}
+    <a href="/categories" data-i18n="all_categories" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+      جميع التصنيفات
     </a>
-    <a href="/" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-      {SiteOptions.labels.backToHome}
+    <a href="/" data-i18n="back_home" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+      العودة إلى الرئيسية
     </a>
   </div>
 

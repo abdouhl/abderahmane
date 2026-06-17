@@ -4,47 +4,50 @@ import BlogLayout from "../layouts/BlogLayout.astro"
 import Header from "../components/Header.astro"
 import Footer from "../components/Footer.astro"
 import SiteOptions from "../site.config.mjs"
+import { getCategoryAr } from "../utils/categories"
 
 const allPosts = await getCollection("article")
 const allCategories = [...new Set(allPosts.map((post) => post.data.category))].sort()
-
-const categoryCounts = allCategories.map((category) => ({
-  name: category,
-  count: allPosts.filter((post) => post.data.category === category).length,
-}))
+const categoryCounts = allCategories.map((category) => {
+  const countAr = allPosts.filter((post) => post.data.category === category && (post.data.lang ?? "en") === "ar").length
+  const countEn = allPosts.filter((post) => post.data.category === category && (post.data.lang ?? "en") === "en").length
+  return { name: category, nameAr: getCategoryAr(category), countAr, countEn }
+})
 ---
 
-<BlogLayout title={`Categories — ${SiteOptions.siteTitle}`} description="Browse articles by category">
+<BlogLayout title={`التصنيفات — ${SiteOptions.siteTitle}`} description="تصفح المقالات حسب التصنيف">
   <Header slot="hero" />
 
   <div class="pt-10 pb-6 border-b border-[#d0cdc6] dark:border-gray-800 mb-12">
-    <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-slate-100">
-      {SiteOptions.labels.allCategories}
+    <h1 data-i18n="all_categories" class="text-3xl font-bold tracking-tight text-gray-900 dark:text-slate-100">
+      جميع التصنيفات
     </h1>
-    <p class="mt-2 text-gray-500 dark:text-gray-400 text-sm">{SiteOptions.labels.exploreArticlesByCategories}</p>
+    <p data-i18n="explore_category" class="mt-2 text-gray-500 dark:text-gray-400 text-sm">
+      استكشف المقالات حسب التصنيف
+    </p>
   </div>
 
   <section>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {
-        categoryCounts.map(({ name, count }) => (
-          <a
-            href={`/category/${name.toLowerCase().replace(/\s+/g, "-")}`}
-            class="flex items-center justify-between p-5 border border-[#d0cdc6] dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors group"
-          >
-            <h3 class="font-semibold text-gray-900 dark:text-slate-100 group-hover:underline decoration-1">
-              {name}
-            </h3>
-            <span class="text-sm text-gray-400 dark:text-gray-500 tabular-nums">({count})</span>
-          </a>
-        ))
-      }
+      {categoryCounts.map(({ name, nameAr, countAr, countEn }) => (
+        <a
+          href={`/category/${name.toLowerCase().replace(/\s+/g, "-")}`}
+          data-has-ar={countAr > 0 ? "1" : "0"}
+          data-has-en={countEn > 0 ? "1" : "0"}
+          class="flex items-center justify-between p-5 border border-[#d0cdc6] dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 transition-colors group"
+        >
+          <h3 data-text-ar={nameAr} data-text-en={name} class="font-semibold text-gray-900 dark:text-slate-100 group-hover:underline decoration-1">
+            {nameAr}
+          </h3>
+          <span data-text-ar={`(${countAr})`} data-text-en={`(${countEn})`} class="text-sm text-gray-400 dark:text-gray-500 tabular-nums">({countAr})</span>
+        </a>
+      ))}
     </div>
   </section>
 
   <div class="mt-14 text-center">
-    <a href="/" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
-      {SiteOptions.labels.backToHome}
+    <a href="/" data-i18n="back_home" class="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+      العودة إلى الرئيسية
     </a>
   </div>
 

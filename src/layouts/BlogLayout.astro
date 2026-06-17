@@ -5,32 +5,111 @@ import SiteOptions from "../site.config.mjs"
 export interface Props {
   title: string
   description?: string
+  image?: string
+  pubDate?: Date
+  articleAuthor?: string
+  type?: "website" | "article"
 }
 
-const { title = SiteOptions.siteTitle, description = SiteOptions.siteSubTitle } = Astro.props
+const {
+  title = SiteOptions.siteTitle,
+  description = SiteOptions.siteSubTitle,
+  image,
+  pubDate,
+  articleAuthor,
+  type = "website",
+} = Astro.props
+
+const canonicalUrl = new URL(Astro.url.pathname, SiteOptions.siteUrl).toString()
+const ogImage = image
+  ? new URL(image, SiteOptions.siteUrl).toString()
+  : new URL(SiteOptions.defaultOgImage, SiteOptions.siteUrl).toString()
+
+const siteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": SiteOptions.siteTitle,
+  "url": SiteOptions.siteUrl,
+  "description": SiteOptions.siteSubTitle,
+  "author": {
+    "@type": "Person",
+    "name": SiteOptions.siteTitle,
+    "url": SiteOptions.siteUrl,
+  },
+}
+
+const articleSchema = type === "article" && pubDate ? {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": title,
+  "description": description,
+  "image": ogImage,
+  "datePublished": pubDate.toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": articleAuthor || SiteOptions.defaultAuthorName,
+    "url": SiteOptions.siteUrl,
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": SiteOptions.siteTitle,
+    "url": SiteOptions.siteUrl,
+  },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl },
+} : null
 ---
 
 <!doctype html>
 <html lang="ar" dir="rtl" class="h-full">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content={articleAuthor || SiteOptions.siteTitle} />
+    <link rel="canonical" href={canonicalUrl} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:site_name" content={SiteOptions.siteTitle} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ar_DZ" />
+    <meta property="og:locale:alternate" content="en_US" />
+    {type === "article" && pubDate && (
+      <meta property="article:published_time" content={pubDate.toISOString()} />
+    )}
+    {type === "article" && articleAuthor && (
+      <meta property="article:author" content={articleAuthor} />
+    )}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {SiteOptions.twitterHandle && (
+      <meta name="twitter:site" content={SiteOptions.twitterHandle} />
+    )}
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
 
-    <!-- Set lang/dir immediately to prevent layout flash -->
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
+    {articleSchema && (
+      <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+    )}
+
+    <!-- Prevent layout/theme flash -->
     <script is:inline>
       ;(() => {
         const lang = localStorage.getItem("lang") || "ar"
@@ -42,12 +121,8 @@ const { title = SiteOptions.siteTitle, description = SiteOptions.siteSubTitle } 
     </script>
 
     {SiteOptions.gTag && (
-      <script
-        data-category="analytics"
-        is:inline
-        type="text/partytown"
-        src={`https://www.googletagmanager.com/gtag/js?id=${SiteOptions.gTag}`}
-      ></script>
+      <script data-category="analytics" is:inline type="text/partytown"
+        src={`https://www.googletagmanager.com/gtag/js?id=${SiteOptions.gTag}`}></script>
       <script data-category="analytics" is:inline type="text/partytown" define:vars={{gTag: SiteOptions.gTag}}>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
@@ -59,18 +134,14 @@ const { title = SiteOptions.siteTitle, description = SiteOptions.siteSubTitle } 
 
   <body class="text-gray-900 dark:text-zinc-100 transition-colors duration-300 min-h-full overflow-x-hidden">
     <slot name="hero" />
-
-    <main class="max-w-[1100px] mx-auto px-6">
+    <main class="max-w-[1100px] mx-auto px-4 sm:px-6">
       <slot />
     </main>
-
     <script is:inline src="/scripts/theme-toggle.js"></script>
     <script is:inline src="/scripts/i18n.js"></script>
   </body>
 </html>
 
 <style>
-  @view-transition {
-    navigation: auto;
-  }
+  @view-transition { navigation: auto; }
 </style>

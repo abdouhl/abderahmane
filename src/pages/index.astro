@@ -5,6 +5,7 @@ import Header from "../components/Header.astro"
 import Footer from "../components/Footer.astro"
 import PostCard from "../components/PostCard.astro"
 import SiteOptions from "../site.config.mjs"
+import { getCategoryAr } from "../utils/categories"
 
 const allPosts = await getCollection("article")
 const sortedPosts = allPosts.sort(
@@ -14,16 +15,21 @@ const latestPosts = sortedPosts.slice(0, SiteOptions.numberOfLatestPostsOnHomePa
 
 const categoryCounts = allPosts.reduce((acc, post) => {
   const cat = post.data.category
-  if (cat) acc[cat] = (acc[cat] || 0) + 1
+  const lang = post.data.lang ?? "en"
+  if (!cat) return acc
+  acc[cat] ??= { ar: 0, en: 0 }
+  acc[cat][lang === "ar" ? "ar" : "en"]++
   return acc
-}, {} as Record<string, number>)
-const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1])
+}, {} as Record<string, { ar: number; en: number }>)
+const sortedCategories = Object.entries(categoryCounts)
+  .map(([cat, counts]) => ({ cat, catAr: getCategoryAr(cat), countAr: counts.ar, countEn: counts.en }))
+  .sort((a, b) => (b.countAr + b.countEn) - (a.countAr + a.countEn))
 ---
 
 <BlogLayout title={SiteOptions.siteTitle}>
   <Header slot="hero" />
 
-  <div class="flex gap-14 mt-12 mb-20">
+  <div class="flex flex-col lg:flex-row gap-10 lg:gap-14 mt-12 mb-20">
 
     <!-- Main: latest articles -->
     <div class="flex-[2] min-w-0">
@@ -49,7 +55,7 @@ const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[
     </div>
 
     <!-- Sidebar -->
-    <aside class="w-[280px] shrink-0 pt-8">
+    <aside class="w-full lg:w-[280px] shrink-0 lg:pt-8">
 
       <!-- About -->
       <div class="mb-10">
@@ -68,14 +74,18 @@ const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[
             التصنيفات
           </h3>
           <ul class="space-y-1">
-            {sortedCategories.map(([cat, count]) => (
-              <li class="border-b border-[#d0cdc6] dark:border-gray-800 pb-1">
+            {sortedCategories.map(({ cat, catAr, countAr, countEn }) => (
+              <li
+                data-has-ar={countAr > 0 ? "1" : "0"}
+                data-has-en={countEn > 0 ? "1" : "0"}
+                class="border-b border-[#d0cdc6] dark:border-gray-800 pb-1"
+              >
                 <a
                   href={`/category/${cat.toLowerCase().replace(/\s+/g, "-")}`}
                   class="flex justify-between items-center py-1 text-sm text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors"
                 >
-                  <span>{cat}</span>
-                  <span class="text-gray-400 dark:text-gray-500 text-xs">({count})</span>
+                  <span data-text-ar={catAr} data-text-en={cat}>{catAr}</span>
+                  <span data-text-ar={`(${countAr})`} data-text-en={`(${countEn})`} class="text-gray-400 dark:text-gray-500 text-xs">({countAr})</span>
                 </a>
               </li>
             ))}

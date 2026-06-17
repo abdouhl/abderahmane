@@ -1,5 +1,6 @@
 ---
 import { type CollectionEntry } from "astro:content"
+import { getCategoryAr } from "../utils/categories"
 
 export interface Props {
   post: CollectionEntry<"article">
@@ -8,6 +9,8 @@ export interface Props {
 
 const { post, showCategory = true } = Astro.props
 const { title, pubDate, category, description, thumb } = post.data
+const postLang = post.data.lang ?? "en"
+const categoryAr = getCategoryAr(category)
 
 const dateAr = new Intl.DateTimeFormat("ar", {
   year: "numeric", month: "long", day: "numeric",
@@ -18,7 +21,7 @@ const dateEn = new Intl.DateTimeFormat("en-US", {
 }).format(pubDate)
 ---
 
-<li class="flex items-start gap-6 py-7 border-b border-[#d0cdc6] dark:border-gray-800 group">
+<li data-post-lang={postLang} class="flex items-start gap-6 py-7 border-b border-[#d0cdc6] dark:border-gray-800 group">
   {
     thumb && (
       <a href={`/article/${post.slug}`} class="shrink-0 hidden sm:block overflow-hidden">
@@ -34,7 +37,9 @@ const dateEn = new Intl.DateTimeFormat("en-US", {
   <div class="flex-1 min-w-0">
     <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">
       <span data-date-ar={dateAr} data-date-en={dateEn}>{dateAr}</span>
-      {showCategory && category && <> &nbsp;·&nbsp; {category}</>}
+      {showCategory && category && (
+        <> &nbsp;·&nbsp; <span data-text-ar={categoryAr} data-text-en={category}>{categoryAr}</span></>
+      )}
     </p>
     <h2 class="text-xl font-bold leading-snug mb-2 text-gray-900 dark:text-slate-100">
       <a href={`/article/${post.slug}`} class="group-hover:underline decoration-1 underline-offset-2">

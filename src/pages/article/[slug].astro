@@ -17,35 +17,35 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<"article">
 
 const post = Astro.props
-const { title, pubDate, category, description, thumb, author, tags, large } = post.data
+const { title, pubDate, category, description, author, tags, large } = post.data
 const { Content } = await post.render()
 
 const allPosts = await getCollection("article")
 const similarPosts = allPosts
-  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category)
+  .filter((p) => p.slug !== post.slug && p.data.category === post.data.category && (p.data.lang ?? "en") === (post.data.lang ?? "en"))
   .slice(0, 3)
 
-const formattedDate = new Intl.DateTimeFormat("en-US", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
+const dateAr = new Intl.DateTimeFormat("ar", {
+  year: "numeric", month: "long", day: "numeric",
+}).format(pubDate)
+
+const dateEn = new Intl.DateTimeFormat("en-US", {
+  year: "numeric", month: "long", day: "numeric",
 }).format(pubDate)
 ---
 
-<BlogLayout title={title} description={description}>
+<BlogLayout title={title} description={description} image={post.data.thumb} pubDate={pubDate} articleAuthor={author} type="article">
   <Header slot="hero" />
 
   <div class="pt-10 pb-6 border-b border-[#d0cdc6] dark:border-gray-800">
-    {
-      category && (
-        <a
-          href={`/category/${category.toLowerCase().replace(/\s+/g, "-")}`}
-          class="text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mb-4 block"
-        >
-          {category}
-        </a>
-      )
-    }
+    {category && (
+      <a
+        href={`/category/${category.toLowerCase().replace(/\s+/g, "-")}`}
+        class="text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mb-4 block"
+      >
+        {category}
+      </a>
+    )}
 
     <h1 class="text-3xl md:text-4xl font-bold tracking-tight mb-5 text-gray-900 dark:text-slate-50 leading-tight">
       {title}
@@ -59,23 +59,21 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
         {author}
       </a>
       <span class="text-gray-300 dark:text-gray-600">·</span>
-      <span>{formattedDate}</span>
+      <span data-date-ar={dateAr} data-date-en={dateEn}>{dateAr}</span>
     </div>
 
-    {
-      tags && tags.length > 0 && (
-        <div class="flex flex-wrap gap-2 mt-4">
-          {tags.map((tag) => (
-            <a
-              href={`/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
-              class="text-xs text-gray-500 dark:text-gray-400 border border-[#d0cdc6] dark:border-gray-700 px-2 py-1 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
-            >
-              {tag}
-            </a>
-          ))}
-        </div>
-      )
-    }
+    {tags && tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mt-4">
+        {tags.map((tag) => (
+          <a
+            href={`/tag/${tag.toLowerCase().replace(/\s+/g, "-")}`}
+            class="text-xs text-gray-500 dark:text-gray-400 border border-[#d0cdc6] dark:border-gray-700 px-2 py-1 hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+          >
+            {tag}
+          </a>
+        ))}
+      </div>
+    )}
   </div>
 
   <article
@@ -90,33 +88,27 @@ const formattedDate = new Intl.DateTimeFormat("en-US", {
       prose-blockquote:text-gray-600 dark:prose-blockquote:text-gray-400
       prose-img:rounded-none"
   >
-    {
-      large && (
-        <div class="mb-8 -mx-4 sm:mx-0">
-          <img src={large} alt={title} class="w-full h-auto" />
-        </div>
-      )
-    }
+    {large && (
+      <div class="mb-8 -mx-4 sm:mx-0">
+        <img src={large} alt={title} class="w-full h-auto" />
+      </div>
+    )}
     <Content />
   </article>
 
-  {
-    SiteOptions.showSimilarPosts && similarPosts.length > 0 && (
-      <>
-        <hr class="border-t border-[#d0cdc6] dark:border-gray-800 my-14" />
-        <section>
-          <h2 class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500 mb-8">
-            {SiteOptions.labels.youMightAlsoLike}
-          </h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            {similarPosts.map((similarPost) => (
-              <FeaturedCard post={similarPost} />
-            ))}
-          </div>
-        </section>
-      </>
-    )
-  }
+  {SiteOptions.showSimilarPosts && similarPosts.length > 0 && (
+    <>
+      <hr class="border-t border-[#d0cdc6] dark:border-gray-800 my-14" />
+      <section>
+        <h2 data-i18n="you_might_like" class="text-[11px] font-bold uppercase tracking-[0.15em] text-gray-400 dark:text-gray-500 mb-8">
+          قد يعجبك أيضاً
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {similarPosts.map((p) => <FeaturedCard post={p} />)}
+        </div>
+      </section>
+    </>
+  )}
 
   <Footer />
 </BlogLayout>

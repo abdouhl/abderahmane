@@ -1,6 +1,7 @@
 ---
 import { type CollectionEntry } from "astro:content"
 import SiteOptions from "../site.config.mjs"
+import { getCategoryAr } from "../utils/categories"
 
 export interface Props {
   post: CollectionEntry<"article">
@@ -8,9 +9,11 @@ export interface Props {
 
 const { post } = Astro.props
 const { title, description, thumb, category } = post.data
+const postLang = post.data.lang ?? "en"
+const categoryAr = getCategoryAr(category)
 ---
 
-<article class="flex flex-col group">
+<article data-post-lang={postLang} class="flex flex-col group">
   {
     SiteOptions.showThumbnailOnFeaturedPosts && thumb && (
       <a href={`/article/${post.slug}`} class="block mb-4 overflow-hidden">
@@ -25,8 +28,8 @@ const { title, description, thumb, category } = post.data
   }
   {
     category && (
-      <span class="text-[11px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 block">
-        {category}
+      <span data-text-ar={categoryAr} data-text-en={category} class="text-[11px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2 block">
+        {categoryAr}
       </span>
     )
   }

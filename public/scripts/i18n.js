@@ -102,6 +102,17 @@ function applyLang(lang) {
     el.textContent = lang === "ar" ? el.getAttribute("data-date-ar") : el.getAttribute("data-date-en")
   })
 
+  // Hide posts/cards that don't belong to the active language
+  document.querySelectorAll("[data-post-lang]").forEach(el => {
+    el.style.display = el.getAttribute("data-post-lang") === lang ? "" : "none"
+  })
+
+  // Hide listing tiles (categories/tags/authors) with no posts in the active language
+  document.querySelectorAll("[data-has-ar]").forEach(el => {
+    const has = lang === "ar" ? el.getAttribute("data-has-ar") : el.getAttribute("data-has-en")
+    el.style.display = has === "1" ? "" : "none"
+  })
+
   // Masthead name font: Playfair for EN, Cairo for AR
   document.querySelectorAll(".masthead-name").forEach(el => {
     el.style.fontFamily = lang === "ar"
