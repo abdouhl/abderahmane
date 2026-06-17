@@ -1,5 +1,8 @@
 ---
 import SiteOptions from "../site.config.mjs"
+
+const social = SiteOptions.social ?? {}
+const hasSocial = Object.values(social).some((url) => url)
 ---
 
 <footer class="mt-20 py-8 border-t border-[#d0cdc6] dark:border-gray-800">
@@ -20,6 +23,27 @@ import SiteOptions from "../site.config.mjs"
         )
       }
     </nav>
+
+    {hasSocial && (
+      <nav class="flex items-center gap-4">
+        {social.twitter && (
+          <a href={social.twitter} target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor"><path d="M18.9 2H22l-7.2 8.2L23 22h-6.8l-5.3-6.9L4.6 22H1.5l7.7-8.8L1 2h6.9l4.8 6.4L18.9 2zm-2.4 18h1.9L7.6 4H5.6l10.9 16z"/></svg>
+          </a>
+        )}
+        {social.github && (
+          <a href={social.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-1.05-.01-1.9-2.78.61-3.37-1.21-3.37-1.21-.46-1.2-1.11-1.52-1.11-1.52-.91-.64.07-.63.07-.63 1 .07 1.53 1.05 1.53 1.05.89 1.55 2.34 1.1 2.91.84.09-.66.34-1.1.62-1.36-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.04 1.03-2.76-.1-.26-.45-1.31.1-2.73 0 0 .84-.27 2.75 1.05a9.32 9.32 0 0 1 5 0c1.91-1.32 2.75-1.05 2.75-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.64 1.03 2.76 0 3.94-2.34 4.8-4.57 5.06.35.31.66.92.66 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.59.69.49A10.03 10.03 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg>
+          </a>
+        )}
+        {social.linkedin && (
+          <a href={social.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
+          </a>
+        )}
+      </nav>
+    )}
+
     <p data-i18n="copyright" class="text-sm text-gray-400 dark:text-gray-500">
       © 2026 عبد الرحمان هلال. جميع الحقوق محفوظة.
     </p>

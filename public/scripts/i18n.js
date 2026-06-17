@@ -71,7 +71,12 @@ const T = {
   }
 }
 
+function hasEnglish() {
+  return document.documentElement.dataset.hasEnglish === "1"
+}
+
 function getLang() {
+  if (!hasEnglish()) return "ar"
   return localStorage.getItem("lang") || "ar"
 }
 
@@ -128,6 +133,7 @@ function applyLang(lang) {
 }
 
 function toggleLang() {
+  if (!hasEnglish()) return
   applyLang(getLang() === "ar" ? "en" : "ar")
 }
 

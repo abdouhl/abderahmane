@@ -1,5 +1,9 @@
 ---
+import { getCollection } from "astro:content"
 import SiteOptions from "../site.config.mjs"
+
+const articles = await getCollection("article")
+const hasEnglish = articles.some((a) => (a.data.lang ?? "en") === "en")
 ---
 
 <header class="bg-[#eeebe4] dark:bg-[#111110]">
@@ -34,15 +38,17 @@ import SiteOptions from "../site.config.mjs"
       </button>
 
       <div class="flex items-center gap-3">
-        <!-- Language toggle -->
-        <button
-          id="lang-toggle"
-          onclick="toggleLang()"
-          aria-label="Switch language"
-          class="text-[10px] font-bold tracking-[0.1em] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors border border-[#d0cdc6] dark:border-gray-700 px-2 py-0.5"
-        >
-          EN
-        </button>
+        <!-- Language toggle: only shown when an English article actually exists -->
+        {hasEnglish && (
+          <button
+            id="lang-toggle"
+            onclick="toggleLang()"
+            aria-label="Switch language"
+            class="text-[10px] font-bold tracking-[0.1em] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors border border-[#d0cdc6] dark:border-gray-700 px-2 py-0.5"
+          >
+            EN
+          </button>
+        )}
 
         <!-- Theme toggle -->
         <button

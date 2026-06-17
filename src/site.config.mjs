@@ -3,8 +3,13 @@ export default {
     siteTitle: "Abderahmane Hellal",
     siteSubTitle: "Tech · Design · Life",
     copyright: "© 2026 Abderahmane Hellal. All rights reserved.",
-    twitterHandle: "@abderahmane",    // update or remove if unused
+    twitterHandle: "@abdou_hll",      // update or remove if unused
     defaultOgImage: "/og.png",        // place a 1200×630 image at public/og.png
+    social: {
+        twitter: "https://x.com/abdou_hll",
+        github: "https://github.com/abdouhl",
+        linkedin: "",                 // leave empty to hide the icon
+    },
     showAuthorsOnHomePage: false,
     showFeaturrdPostsOnHomePage: false,
     showCategoryOnPosts: true,
