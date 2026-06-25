@@ -1,7 +1,7 @@
 ---
 number: 29
 title: "الوضوح يأتي بعد الفعل، لا قبله"
-date: 2026-06-21
+date: 2027-01-01
 image: "./taammulat-29.png"
 ---
 

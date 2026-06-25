@@ -1,7 +1,7 @@
 ---
 number: 23
 title: "الصدق مع النفس يسبق كل صدق آخر"
-date: 2026-06-21
+date: 2026-11-20
 image: "./taammulat-23.png"
 ---
 

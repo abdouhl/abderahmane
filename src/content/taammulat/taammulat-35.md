@@ -1,7 +1,7 @@
 ---
 number: 35
 title: "العادة تبدأ قرارا،\nوتنتهي هوية"
-date: 2026-06-23
+date: 2027-02-12
 image: "./taammulat-35.png"
 ---
 

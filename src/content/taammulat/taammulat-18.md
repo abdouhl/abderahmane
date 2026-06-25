@@ -1,7 +1,7 @@
 ---
 number: 18
 title: "الانتباه أصبح أندر من الوقت"
-date: 2026-06-21
+date: 2026-10-16
 image: "./taammulat-18.png"
 ---
 

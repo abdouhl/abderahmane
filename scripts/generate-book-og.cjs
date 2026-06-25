@@ -36,7 +36,7 @@ function parseFrontmatter(raw) {
 
 function buildSvg(book, fonts) {
   const { title, arabicTitle, author, summary, coverDataUrl } = book;
-  const { W, H, PAD, BG, INK, MUTED, RULE, ARABIC_FONT, LATIN_FONT, escapeXml, fitBlock, fitBlockByLines, tickRule } = lib;
+  const { W, H, PAD, BG, INK, MUTED, RULE, ARABIC_FONT, ARABIC_TITLE_FONT, LATIN_FONT, escapeXml, fitBlock, fitBlockByLines, tickRule } = lib;
 
   const hasCover = Boolean(coverDataUrl);
   const textColX = hasCover ? PAD + COVER_W + 56 : PAD;
@@ -48,7 +48,7 @@ function buildSvg(book, fonts) {
 
   const titleFit = fitBlockByLines(fonts.latinBold, title, { maxWidth: textColWidth, startSize: hasCover ? 44 : 50, minSize: 26, maxLines: 2 });
   const arabicTitleFit = arabicTitle
-    ? lib.fitBlock(fonts.arabicRegular, arabicTitle, { maxWidth: textColWidth, maxHeight: 80, startSize: 30, minSize: 20 })
+    ? lib.fitBlock(fonts.arabicTitle, arabicTitle, { maxWidth: textColWidth, maxHeight: 80, startSize: 30, minSize: 20 })
     : { lines: [], fontSize: 30, lineHeight: 0 };
 
   let y = top;
@@ -91,7 +91,7 @@ function buildSvg(book, fonts) {
     <style>
       text { dominant-baseline: middle; }
       .title { font-family: "${LATIN_FONT}"; font-weight: 700; fill: ${INK}; text-anchor: middle; direction: ltr; }
-      .arabicTitle { font-family: "${ARABIC_FONT}"; font-weight: 500; fill: ${MUTED}; text-anchor: middle; direction: rtl; }
+      .arabicTitle { font-family: "${ARABIC_TITLE_FONT}"; font-weight: bold; fill: ${MUTED}; text-anchor: middle; direction: rtl; }
       .author { font-family: "${LATIN_FONT}"; font-weight: 400; font-size: 22px; fill: ${MUTED}; text-anchor: middle; letter-spacing: 0.5px; }
       .summary { font-family: "${ARABIC_FONT}"; font-weight: 400; fill: ${INK}; text-anchor: middle; direction: rtl; }
       .footer { font-family: "${ARABIC_FONT}"; font-weight: 500; font-size: 22px; fill: ${MUTED}; }

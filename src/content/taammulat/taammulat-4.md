@@ -1,7 +1,7 @@
 ---
 number: 4
 title: "القرار المؤجل يكبر في الصمت"
-date: 2026-06-19
+date: 2026-07-10
 image: "./taammulat-4.png"
 ---
 

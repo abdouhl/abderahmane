@@ -35,6 +35,7 @@ const bookCollection = defineCollection({
         arabicTitle: z.string().optional(),
         author: z.string(),
         feedSummary: z.string(),
+        date: z.date(),
         cover: image().optional(),
     }),
 });

@@ -51,11 +51,11 @@ async function remoteImageToDataUri(url, boxW, boxH) {
 
 function buildSvg(post, fonts) {
   const { title, category, author, dateStr, description, photoDataUrl, isEnglish } = post;
-  const { W, H, PAD, BG, INK, MUTED, RULE, ARABIC_FONT, LATIN_FONT, escapeXml, fitBlock, fitBlockByLines, tickRule } = lib;
+  const { W, H, PAD, BG, INK, MUTED, RULE, ARABIC_FONT, ARABIC_TITLE_FONT, LATIN_FONT, escapeXml, fitBlock, fitBlockByLines, tickRule } = lib;
 
-  const titleFont = isEnglish ? fonts.latinBold : fonts.arabicBold;
+  const titleFont = isEnglish ? fonts.latinBold : fonts.arabicTitle;
   const bodyFont = isEnglish ? fonts.latinRegular : fonts.arabicRegular;
-  const titleFontFamily = isEnglish ? LATIN_FONT : ARABIC_FONT;
+  const titleFontFamily = isEnglish ? LATIN_FONT : ARABIC_TITLE_FONT;
   const bodyFontFamily = isEnglish ? LATIN_FONT : ARABIC_FONT;
   const dir = isEnglish ? "ltr" : "rtl";
 

@@ -1,7 +1,7 @@
 ---
 number: 11
 title: "الحكمة معرفة دفعت ثمنها بنفسك"
-date: 2026-06-19
+date: 2026-08-28
 image: "./taammulat-11.png"
 ---
 

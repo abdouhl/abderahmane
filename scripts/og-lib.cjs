@@ -21,9 +21,11 @@ const sharp = require("sharp");
 const fontkit = require("fontkit");
 
 const FONTS_DIR = path.join(__dirname, "og-fonts");
-const FONT_FILES = ["Cairo-Variable.ttf", "Inter-Variable.ttf"];
+const FONT_FILES = ["Cairo-Variable.ttf", "Inter-Variable.ttf", "ArefRuqaaInk-Bold.ttf", "ArefRuqaa-Regular.ttf", "Tajawal-Regular.ttf"];
 
 const ARABIC_FONT = "Cairo";
+const ARABIC_TITLE_FONT = "Aref Ruqaa Ink";
+const ARABIC_BYLINE_FONT = "Aref Ruqaa";
 const LATIN_FONT = "Inter";
 
 const W = 1200;
@@ -61,9 +63,11 @@ async function loadFonts() {
   if (installedAny) await new Promise((r) => setTimeout(r, 400));
   const arabic = fontkit.openSync(path.join(FONTS_DIR, "Cairo-Variable.ttf"));
   const latin = fontkit.openSync(path.join(FONTS_DIR, "Inter-Variable.ttf"));
+  const arabicTitleFont = fontkit.openSync(path.join(FONTS_DIR, "ArefRuqaaInk-Bold.ttf"));
   return {
     arabicRegular: arabic,
     arabicBold: arabic.getVariation({ wght: 700 }),
+    arabicTitle: arabicTitleFont,
     latinRegular: latin.getVariation({ wght: 400, opsz: 32 }),
     latinBold: latin.getVariation({ wght: 700, opsz: 32 }),
   };
@@ -158,7 +162,7 @@ async function renderPng(svg, outPath) {
 
 module.exports = {
   W, H, PAD, BG, INK, MUTED, RULE,
-  ARABIC_FONT, LATIN_FONT,
+  ARABIC_FONT, ARABIC_TITLE_FONT, ARABIC_BYLINE_FONT, LATIN_FONT,
   loadFonts,
   escapeXml,
   measureWidth,
