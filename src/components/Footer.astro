@@ -22,6 +22,13 @@ const hasSocial = Object.values(social).some((url) => url)
           </a>
         )
       }
+      {
+        SiteOptions.showArchiveLinkOnFooter && (
+          <a href="/blog/" data-i18n="footer_archive" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-medium">
+            الأرشيف
+          </a>
+        )
+      }
     </nav>
 
     {hasSocial && (

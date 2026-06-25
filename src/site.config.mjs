@@ -1,5 +1,5 @@
 export default {
-    siteUrl: "https://abderahmane.com", // update before deploying
+    siteUrl: "https://abderahmane.elhellal.com",
     siteTitle: "Abderahmane Hellal",
     siteSubTitle: "Tech · Design · Life",
     copyright: "© 2026 Abderahmane Hellal. All rights reserved.",
@@ -39,6 +39,7 @@ export default {
     defaultAuthorName: "Abderahmane Hellal",
     showCategoriesLinkOnFooter: true,
     showTagsLinkOnFooter: true,
+    showArchiveLinkOnFooter: true,
     showAuthorsLinkOnFooter: false,
     showSimilarPosts: true,
     showReadMoreLinkOnFeaturedPosts: true,

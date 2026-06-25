@@ -6,80 +6,40 @@ const articles = await getCollection("article")
 const hasEnglish = articles.some((a) => (a.data.lang ?? "en") === "en")
 ---
 
-<header class="bg-[#eeebe4] dark:bg-[#111110]">
+<header class="relative bg-[#eeebe4] dark:bg-[#111110]">
 
-  <!-- Thin top nav -->
-  <div class="border-b border-[#d0cdc6] dark:border-gray-800">
-    <div class="max-w-[1100px] mx-auto px-4 sm:px-6 flex items-center justify-between h-12 sm:h-10">
-
-      <!-- Desktop nav -->
-      <nav class="hidden sm:flex items-center gap-7 text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
-        <a href="/" data-i18n="nav_home" class="hover:text-gray-900 dark:hover:text-white transition-colors">الرئيسية</a>
-        <a href="/categories" data-i18n="nav_categories" class="hover:text-gray-900 dark:hover:text-white transition-colors">التصنيفات</a>
-        <a href="/blog/" data-i18n="nav_archive" class="hover:text-gray-900 dark:hover:text-white transition-colors">الأرشيف</a>
-        <a href="/tags" data-i18n="nav_tags" class="hover:text-gray-900 dark:hover:text-white transition-colors">الوسوم</a>
-      </nav>
-
-      <!-- Mobile: hamburger -->
+  <!-- Utility cluster: language + theme toggle -->
+  <div class="absolute top-3 left-3 sm:top-5 sm:left-6 flex items-center gap-3">
+    <!-- Language toggle: only shown when an English article actually exists -->
+    {hasEnglish && (
       <button
-        id="mobile-menu-btn"
-        aria-label="Toggle menu"
-        aria-expanded="false"
-        class="sm:hidden p-1 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-        onclick="
-          const menu = document.getElementById('mobile-menu');
-          const open = menu.classList.toggle('hidden');
-          this.setAttribute('aria-expanded', String(!open));
-        "
+        id="lang-toggle"
+        onclick="toggleLang()"
+        aria-label="Switch language"
+        class="text-[10px] font-bold tracking-[0.1em] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors border border-[#d0cdc6] dark:border-gray-700 px-2 py-0.5"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
+        EN
       </button>
+    )}
 
-      <div class="flex items-center gap-3">
-        <!-- Language toggle: only shown when an English article actually exists -->
-        {hasEnglish && (
-          <button
-            id="lang-toggle"
-            onclick="toggleLang()"
-            aria-label="Switch language"
-            class="text-[10px] font-bold tracking-[0.1em] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors border border-[#d0cdc6] dark:border-gray-700 px-2 py-0.5"
-          >
-            EN
-          </button>
-        )}
-
-        <!-- Theme toggle -->
-        <button
-          onclick="toggleTheme()"
-          id="theme-toggle-button"
-          aria-label="Toggle theme"
-          class="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-        >
-          <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 hidden">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"></path>
-          </svg>
-          <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 hidden">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Mobile nav dropdown -->
-  <div id="mobile-menu" class="hidden sm:hidden border-b border-[#d0cdc6] dark:border-gray-800 bg-[#eeebe4] dark:bg-[#111110]">
-    <nav class="max-w-[1100px] mx-auto px-4 py-3 flex flex-col gap-0 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
-      <a href="/" data-i18n="nav_home" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">الرئيسية</a>
-      <a href="/categories" data-i18n="nav_categories" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">التصنيفات</a>
-      <a href="/blog/" data-i18n="nav_archive" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">الأرشيف</a>
-      <a href="/tags" data-i18n="nav_tags" class="py-2.5 hover:text-gray-900 dark:hover:text-white transition-colors">الوسوم</a>
-    </nav>
+    <!-- Theme toggle -->
+    <button
+      onclick="toggleTheme()"
+      id="theme-toggle-button"
+      aria-label="Toggle theme"
+      class="p-1 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+    >
+      <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 hidden">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"></path>
+      </svg>
+      <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 hidden">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"></path>
+      </svg>
+    </button>
   </div>
 
   <!-- Masthead -->
-  <div class="py-7 sm:py-9 text-center border-b border-[#d0cdc6] dark:border-gray-800">
+  <div class="py-7 sm:py-9 text-center">
     <a href="/" class="inline-block">
       <p
         class="masthead-name font-black text-gray-900 dark:text-white leading-none tracking-tight"
@@ -105,3 +65,55 @@ const hasEnglish = articles.some((a) => (a.data.lang ?? "en") === "en")
   </div>
 
 </header>
+
+<!--
+  The navbar lives outside <header> on purpose: position:sticky only holds an
+  element in place for as long as its parent box is still scrolling past the
+  viewport. Nested inside the short <header>, it would unstick the moment the
+  masthead scrolled away. As a sibling of <main> directly under <body>, it can
+  stay pinned for the full page scroll.
+-->
+<nav
+  id="main-nav"
+  class="sticky top-0 z-50 bg-[#eeebe4]/95 dark:bg-[#111110]/95 backdrop-blur-sm border-y border-[#d0cdc6] dark:border-gray-800 shadow-[0_1px_0_0_rgba(0,0,0,0.02)]"
+>
+  <div class="max-w-[1100px] mx-auto px-4 sm:px-6 flex items-center justify-between sm:justify-center h-12 sm:h-11">
+
+    <!-- Desktop nav -->
+    <div class="hidden sm:flex items-center gap-7 text-[10px] font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
+      <a href="/" data-i18n="nav_home" class="hover:text-gray-900 dark:hover:text-white transition-colors">الرئيسية</a>
+      <a href="/blog" data-i18n="nav_articles" class="hover:text-gray-900 dark:hover:text-white transition-colors">مقالات</a>
+      <a href="/taammulat" data-i18n="nav_taammulat" class="hover:text-gray-900 dark:hover:text-white transition-colors">تأملات</a>
+      <a href="/books" data-i18n="nav_books" class="hover:text-gray-900 dark:hover:text-white transition-colors">كتب</a>
+      <a href="/projects" data-i18n="nav_projects" class="hover:text-gray-900 dark:hover:text-white transition-colors">مشاريع</a>
+    </div>
+
+    <!-- Mobile: hamburger -->
+    <button
+      id="mobile-menu-btn"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      class="sm:hidden p-1 -m-1 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+      onclick="
+        const menu = document.getElementById('mobile-menu');
+        const open = menu.classList.toggle('hidden');
+        this.setAttribute('aria-expanded', String(!open));
+      "
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile nav dropdown -->
+<div id="mobile-menu" class="hidden sm:hidden sticky top-12 z-50 border-b border-[#d0cdc6] dark:border-gray-800 bg-[#eeebe4] dark:bg-[#111110]">
+  <nav class="max-w-[1100px] mx-auto px-4 py-3 flex flex-col gap-0 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500 dark:text-gray-400">
+    <a href="/" data-i18n="nav_home" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">الرئيسية</a>
+    <a href="/blog" data-i18n="nav_articles" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">مقالات</a>
+    <a href="/taammulat" data-i18n="nav_taammulat" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">تأملات</a>
+    <a href="/books" data-i18n="nav_books" class="py-2.5 border-b border-[#d0cdc6] dark:border-gray-800 hover:text-gray-900 dark:hover:text-white transition-colors">كتب</a>
+    <a href="/projects" data-i18n="nav_projects" class="py-2.5 hover:text-gray-900 dark:hover:text-white transition-colors">مشاريع</a>
+  </nav>
+</div>

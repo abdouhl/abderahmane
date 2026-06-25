@@ -44,7 +44,7 @@ const dateEn = new Intl.DateTimeFormat("en-US", {
 }).format(pubDate)
 ---
 
-<BlogLayout title={title} description={description} image={post.data.thumb} pubDate={pubDate} articleAuthor={author} type="article">
+<BlogLayout title={title} description={description} image={`/og/articles/${post.slug}.png`} pubDate={pubDate} articleAuthor={author} type="article">
   <Header slot="hero" />
 
   <div class="pt-10 pb-6 border-b border-[#d0cdc6] dark:border-gray-800">

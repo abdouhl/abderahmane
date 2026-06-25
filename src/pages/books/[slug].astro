@@ -1,0 +1,110 @@
+---
+import { type CollectionEntry, getCollection } from "astro:content"
+import { Image } from "astro:assets"
+import BlogLayout from "../../layouts/BlogLayout.astro"
+import Header from "../../components/Header.astro"
+import Footer from "../../components/Footer.astro"
+import SiteOptions from "../../site.config.mjs"
+
+export async function getStaticPaths() {
+  const books = await getCollection("books")
+  return books.map((book) => ({
+    params: { slug: book.slug },
+    props: book,
+  }))
+}
+
+type Props = CollectionEntry<"books">
+
+const book = Astro.props
+const { title, arabicTitle, author, number, cover, feedSummary } = book.data
+const { Content } = await book.render()
+
+const allBooks = (await getCollection("books")).sort((a, b) => a.data.number - b.data.number)
+const currentIndex = allBooks.findIndex((b) => b.slug === book.slug)
+const prevBook = currentIndex > 0 ? allBooks[currentIndex - 1] : null
+const nextBook = currentIndex < allBooks.length - 1 ? allBooks[currentIndex + 1] : null
+
+const searchQuery = encodeURIComponent(`${title} ${author}`)
+const amazonUrl = `https://www.amazon.com/s?k=${searchQuery}&i=stripbooks`
+const goodreadsUrl = `https://www.goodreads.com/search?q=${searchQuery}`
+
+const ogImage = `/og/books/${book.slug}.png`
+---
+
+<BlogLayout title={`${title} | ${SiteOptions.siteTitle}`} description={feedSummary || title} image={ogImage} type="article">
+  <Header slot="hero" />
+
+  <div class="pt-10 pb-6 border-b border-[#d0cdc6] dark:border-gray-800">
+    <a
+      href="/books"
+      data-i18n="all_books"
+      class="text-[11px] font-bold uppercase tracking-[0.12em] text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition-colors mb-4 block"
+    >
+      ملخصات الكتب
+    </a>
+    <h1 class="text-2xl md:text-3xl font-bold tracking-tight mb-1 text-gray-900 dark:text-slate-50 leading-tight">
+      {title}
+    </h1>
+    {arabicTitle && (
+      <p class="text-base text-gray-500 dark:text-gray-400 mb-3">{arabicTitle}</p>
+    )}
+    <p class="text-sm text-gray-500 dark:text-gray-400">{author}</p>
+  </div>
+
+  <div class="mt-10 max-w-[520px] mx-auto flex gap-6 items-start border border-[#d0cdc6] dark:border-gray-800 p-6">
+    {cover ? (
+      <Image src={cover} alt={title} width={140} height={210} class="w-[110px] sm:w-[140px] h-auto shrink-0 border border-[#d0cdc6] dark:border-gray-800" />
+    ) : (
+      <span class="w-[110px] sm:w-[140px] h-[165px] sm:h-[210px] shrink-0 border border-[#d0cdc6] dark:border-gray-800 flex items-center justify-center text-3xl font-black text-gray-200 dark:text-gray-800 tabular-nums">
+        {String(number).padStart(2, "0")}
+      </span>
+    )}
+    <div class="flex-1 min-w-0">
+      <h2 class="text-lg font-bold leading-snug text-gray-900 dark:text-slate-100 mb-1">{title}</h2>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">{author}</p>
+      <div class="flex flex-col gap-2">
+        <a
+          href={amazonUrl}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          class="inline-flex items-center justify-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em] bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-4 py-2.5 hover:opacity-80 transition-opacity"
+        >
+          اشترِ الكتاب الآن
+        </a>
+        <a
+          href={goodreadsUrl}
+          target="_blank"
+          rel="noopener noreferrer nofollow"
+          class="inline-flex items-center justify-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.1em] border border-[#d0cdc6] dark:border-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2.5 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+        >
+          عرض على Goodreads
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <article
+    class="mt-10 prose prose-lg max-w-[640px] mx-auto
+      prose-headings:hidden
+      prose-p:text-gray-700 dark:prose-p:text-slate-300
+      prose-strong:text-gray-900 dark:prose-strong:text-slate-100"
+  >
+    <Content />
+  </article>
+
+  <nav class="mt-14 flex items-center justify-between border-t border-[#d0cdc6] dark:border-gray-800 pt-6 text-sm">
+    {prevBook ? (
+      <a href={`/books/${prevBook.slug}`} class="text-gray-600 dark:text-gray-300 hover:underline">
+        → {prevBook.data.title}
+      </a>
+    ) : <span />}
+    {nextBook ? (
+      <a href={`/books/${nextBook.slug}`} class="text-gray-600 dark:text-gray-300 hover:underline">
+        {nextBook.data.title} ←
+      </a>
+    ) : <span />}
+  </nav>
+
+  <Footer />
+</BlogLayout>

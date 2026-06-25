@@ -17,6 +17,30 @@ const articleCollection = defineCollection({
     }),
 });
 
+const taammulatCollection = defineCollection({
+    type: 'content',
+    schema: ({ image }) => z.object({
+        number: z.number(),
+        title: z.string(),
+        date: z.date(),
+        image: image(),
+    }),
+});
+
+const bookCollection = defineCollection({
+    type: 'content',
+    schema: ({ image }) => z.object({
+        number: z.number(),
+        title: z.string(),
+        arabicTitle: z.string().optional(),
+        author: z.string(),
+        feedSummary: z.string(),
+        cover: image().optional(),
+    }),
+});
+
 export const collections = {
     article: articleCollection,
+    taammulat: taammulatCollection,
+    books: bookCollection,
 };

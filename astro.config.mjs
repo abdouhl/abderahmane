@@ -12,8 +12,7 @@ import remarkGistEmbed from './src/plugins/remarkGistEmbed.js'
 import remarkAscinemaEmbed from './src/plugins/remarkAscinemaEmbed.js';
 import remarkSoundcloudEmbed from './src/plugins/remarkSoundcloudEmbed.js';
 
-// Update this to your actual domain before deploying
-const SITE_URL = 'https://abderahmane.com';
+const SITE_URL = 'https://abderahmane.elhellal.com';
 
 export default defineConfig({
     site: SITE_URL,
