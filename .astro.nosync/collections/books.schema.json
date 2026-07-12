@@ -1,0 +1,56 @@
+{
+  "$ref": "#/definitions/books",
+  "definitions": {
+    "books": {
+      "type": "object",
+      "properties": {
+        "number": {
+          "type": "number"
+        },
+        "title": {
+          "type": "string"
+        },
+        "arabicTitle": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        },
+        "feedSummary": {
+          "type": "string"
+        },
+        "date": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "string",
+              "format": "date"
+            },
+            {
+              "type": "integer",
+              "format": "unix-time"
+            }
+          ]
+        },
+        "cover": {
+          "type": "string"
+        },
+        "$schema": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "number",
+        "title",
+        "author",
+        "feedSummary",
+        "date"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
