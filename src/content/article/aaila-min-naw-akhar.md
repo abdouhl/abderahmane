@@ -6,6 +6,7 @@ author: "Abderahmane Hellal"
 category: "مجتمع"
 tags: ["الحيوانات الأليفة", "الأسرة", "الاستهلاك", "السعودية", "أنماط الحياة"]
 lang: "ar"
+thumb: "https://pbs.twimg.com/media/HQJvIdzXMAAeElk?format=jpg"
 ---
 
 قطة تنام على وسادة مخصصة لها في شقة مهني عازب بالرياض، تملك جدول تطعيمات وطبيبا بيطريا خاصا ونظام غذاء مدروسا. قبل سنوات قليلة، كان اقتناء حيوان أليف داخل المنزل خيارا هامشيا في كثير من الأسر الخليجية. اليوم، تضاعف عدد الحيوانات الأليفة في السعودية أكثر من ثلاث مرات: من 800 ألف حيوان فقط إلى 2.4 مليون خلال فترة قصيرة نسبيا، بينما قفزت قيمة سوق أغذية الحيوانات الأليفة من 90 مليون دولار عام 2020 إلى 137 مليون دولار عام 2023 ([PetfoodIndustry](https://www.petfoodindustry.com/regions/central-western-southern-asia/article/15746497/saudi-arabian-pet-food-market-shifts-as-pet-dogs-rise)).
