@@ -6,6 +6,7 @@ author: "Abderahmane Hellal"
 category: "مجتمع"
 tags: ["أوزمبيك", "السمنة", "الصحة", "الخليج", "الجسد"]
 lang: "ar"
+thumb: ""
 ---
 
 قلم حقن أسبوعي، سعره في دبي قد يتجاوز 1100 درهم، يوصف رسميا لمرضى السكري من النوع الثاني، لكن غالبية من يشترونه اليوم في الخليج لا يعانون السكري إطلاقا. هم يريدون فقط أن ينحف الجسد بسرعة أكبر مما تسمح به أي حمية أو رياضة. هذا هو أوزمبيك، الدواء الذي تحول خلال سنوات قليلة من علاج طبي إلى ظاهرة اجتماعية كاملة، وسط بيانات تكشف أن 23.1% من السعوديين البالغين يعانون السمنة و42.6% إضافية يعانون زيادة الوزن ([Saudi Healthcare Consulting](https://saudihealthcareconsulting.com/insights/article/saudi-obesity-treatment-boom-the-fierce-rise-of-glp-1-drugs-bariatric-surgery-and-wellness-clinics), 2026).

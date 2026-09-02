@@ -6,6 +6,7 @@ author: "Abderahmane Hellal"
 category: "علم وتقنية"
 tags: ["الفضاء", "الإمارات", "العلوم", "الطموح العلمي", "التكنولوجيا"]
 lang: "ar"
+thumb: ""
 ---
 
 طفل إماراتي يرسم في كراسة مدرسية صاروخا يحمل علم بلاده متجها نحو كوكب أحمر صغير، لا كخيال بعيد بل كامتداد لمشروع وطني معلن يراه معلقا على شاشة التلفاز في نشرات الأخبار. هذا الطموح ليس مجازا: أطلقت الإمارات "مسبار الأمل" في يوليو 2020 كأول مسبار عربي وإسلامي يصل إلى مدار المريخ ([وكالة الإمارات للفضاء](https://space.gov.ae/Page/20121/20167/Hope-Probe), 2026)، وقبله حقق هزاع المنصوري عام 2019 إنجاز أول رائد فضاء إماراتي وعربي يخوض مهمة علمية مأهولة إلى محطة الفضاء الدولية، لتصبح الإمارات الدولة التاسعة عشرة عالميا التي تحقق ذلك ([المنصة الرسمية للإمارات](https://u.ae/ar-AE/about-the-uae/strategies-initiatives-and-awards/strategies-plans-and-visions/industry-science-and-technology/the-uae-astronaut-programme), 2026). والأبعد من ذلك كله: خطة مئة عام تهدف لبناء أول مستوطنة بشرية على الكوكب الأحمر بحلول 2117 ([المنصة الرسمية للإمارات](https://u.ae/ar-AE/about-the-uae/strategies-initiatives-and-awards/strategies-plans-and-visions/industry-science-and-technology/national-space-programme), 2026).
