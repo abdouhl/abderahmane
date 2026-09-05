@@ -6,6 +6,7 @@ author: "Abderahmane Hellal"
 category: "مجتمع"
 tags: ["البادل", "الرياضة", "الخليج", "رؤية 2030", "أنماط الحياة"]
 lang: "ar"
+thumb: "https://pbs.twimg.com/media/HRMEkDjXgAIHj-t?format=jpg"
 ---
 
 الساعة السادسة صباحا، والملعب محجوز منذ أسبوعين. هذا ليس استثناء في الرياض أو دبي، بل هو الوضع الطبيعي لأي شخص يحاول حجز ملعب بادل في وقت معقول. الرياضة التي كانت مجهولة تماما في المنطقة قبل عقد واحد أصبحت اليوم تحتاج قائمة انتظار: السعودية وحدها تجاوزت الألف ملعب، والإمارات تجاوزت 950 ملعبا، وباتت تمثل نحو 5.27% من حجم السوق العالمي لهذه الرياضة رغم صغر مساحتها الجغرافية ([Padel Game Plan](https://padelgameplan.com/padelblogs/padel-statistics-uae-2026/), 2026). عالميا، تجاوز عدد الملاعب 77 ألفا، أُضيف منها 14 ألف ملعب جديد في 2025 وحدها ([Padel Business Magazine](https://newsletter.padelbusinessmagazine.com/p/global-growth-accelerates-padel-courts-worldwide-exceed-70-000), 2026).
