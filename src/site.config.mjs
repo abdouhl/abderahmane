@@ -1,7 +1,7 @@
 export default {
     siteUrl: "https://abderahmane.elhellal.com",
     siteTitle: "Abderahmane Hellal",
-    siteSubTitle: "Tech · Design · Life",
+    siteSubTitle: "Medicine · Science · Reflection",
     copyright: "© 2026 Abderahmane Hellal. All rights reserved.",
     twitterHandle: "@abdou_hll",      // update or remove if unused
     defaultOgImage: "/og.png",        // place a 1200×630 image at public/og.png
