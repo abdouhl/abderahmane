@@ -17,7 +17,7 @@ export interface Props {
 
 const {
   title = SiteOptions.siteTitle,
-  description = SiteOptions.siteSubTitle,
+  description = SiteOptions.siteDescription,
   image,
   pubDate,
   articleAuthor,
@@ -34,7 +34,7 @@ const siteSchema = {
   "@type": "WebSite",
   "name": SiteOptions.siteTitle,
   "url": SiteOptions.siteUrl,
-  "description": SiteOptions.siteSubTitle,
+  "description": SiteOptions.siteDescription,
   "author": {
     "@type": "Person",
     "name": SiteOptions.siteTitle,

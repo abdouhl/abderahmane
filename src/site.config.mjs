@@ -2,6 +2,8 @@ export default {
     siteUrl: "https://abderahmane.elhellal.com",
     siteTitle: "Abderahmane Hellal",
     siteSubTitle: "Medicine · Science · Reflection",
+    // Default meta description (home and pages without their own).
+    siteDescription: "Abderahmane Hellal, a medical student, writes about medicine, science and how to learn: evidence-based guides on health, nutrition and studying, explained clearly.",
     copyright: "© 2026 Abderahmane Hellal. All rights reserved.",
     twitterHandle: "@abdou_hll",      // update or remove if unused
     defaultOgImage: "/og.png",        // place a 1200×630 image at public/og.png
